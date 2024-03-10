@@ -3,14 +3,14 @@
 
 import cmd
 import shlex
-from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models import storage
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the HBNB project."""
     prompt = '(hbnb) '
-    valid_classes = ["BaseModel"]
-
+    valid_classes = ["BaseModel", "User"]
     def emptyline(self):
         """
         Do nothing when an empty line is entered.
@@ -28,14 +28,13 @@ class HBNBCommand(cmd.Cmd):
           Create a new instance of BaseModel and save it to the JSON file.
         """
         commands = shlex.split(arg)
-
         if len(commands) == 0:
             print("** class name missing **")
         elif commands[0] not in self.valid_classes:
             print("** class doesn't exist **")
         else:
-            new_instance = BaseModel()
-            new_instance.save()
+            new_instance = eval(f"{commands[0]}()")
+            storage.save()
             print(new_instance.id)
     def do_show(self, arg):
         """
@@ -50,7 +49,6 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             objects = storage.all()
-
             key = "{}.{}".format(commands[0], commands[1])
             if key in objects:
                 print(objects[key])
@@ -112,13 +110,11 @@ class HBNBCommand(cmd.Cmd):
                 obj = objects[key]
                 attr_name = commands[2]
                 attr_value = commands[3]
-
                 try:
                     attr_value = eval(attr_value)
                 except Exception:
                     pass
                 setattr(obj, attr_name, attr_value)
-
                 obj.save()
 
 if __name__ == '__main__':
