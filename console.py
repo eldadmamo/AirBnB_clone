@@ -8,7 +8,7 @@ class HBNBCommand(cmd.Cmd):
     """
     HBNBCommand class command-line interface.
     """
-    prompt = "(hbnb) "
+    prompt = "(hbnb)"
 
     def do_quit(self, arg):
         """
