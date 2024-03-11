@@ -14,8 +14,7 @@ from models.user import User
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the HBNB project."""
     prompt = '(hbnb) '
-    valid_classes = ["BaseModel", "User", "Amenity",
-                     "Place", "Review", "State", "City"]
+    valid_classes = ["BaseModel", "User"]
     def emptyline(self):
         """
         Do nothing when an empty line is entered.
