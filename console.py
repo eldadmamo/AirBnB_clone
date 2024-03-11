@@ -2,15 +2,24 @@
 """command-line interface."""
 
 import cmd
+import re
 import shlex
+from models import storage
 from models.base_model import BaseModel
 from models.user import User
-from models import storage
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.city import City
+
+
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the HBNB project."""
     prompt = '(hbnb) '
-    valid_classes = ["BaseModel", "User"]
+    valid_classes = ["BaseModel", "User", "Amenity",
+                     "Place", "Review", "State", "City"]
     def emptyline(self):
         """
         Do nothing when an empty line is entered.
@@ -77,6 +86,7 @@ class HBNBCommand(cmd.Cmd):
         """Print the string representation of all instances or a specific class."""
         objects = storage.all()
         commands = shlex.split(arg)
+        print(f"{commands = }")
         if len(commands) == 0:
             for key, value in objects.items():
                 print(str(value))
@@ -116,6 +126,47 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 setattr(obj, attr_name, attr_value)
                 obj.save()
+    def default(self, arg):
+        """
+        Default behavior for cmd
+        """
+        arg_list = arg.split('.')
+
+        cls_nm = arg_list[0]  # incoming class name
+
+        command = arg_list[1].split('(')
+
+        cmd_met = command[0]  # incoming command method
+
+        e_arg = command[1].split(')')[0]  # extra arguments
+
+        method_dict = {
+                'all': self.do_all,
+                'show': self.do_show,
+                'destroy': self.do_destroy,
+                'update': self.do_update,
+                'count': self.do_count
+                }
+
+        if cmd_met in method_dict.keys():
+            if cmd_met != "update":
+                return method_dict[cmd_met]("{} {}".format(cls_nm, e_arg))
+            else:
+                if not cls_nm:
+                    print("** class name missing **")
+                    return
+                try:
+                    obj_id, arg_dict = split_curly_braces(e_arg)
+                except Exception:
+                    pass
+                try:
+                    call = method_dict[cmd_met]
+                    return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
+                except Exception:
+                    pass
+        else:
+            print("*** Unknown syntax: {}".format(arg))
+            return False
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
