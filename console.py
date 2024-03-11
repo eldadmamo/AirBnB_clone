@@ -18,7 +18,7 @@ from models.city import City
 
 def split_curly_braces(e_arg):
     """
-    Splits the curly braces for the update method
+    Splits the curly brace update method
     """
     curly_braces = re.search(r"\{(.*?)\}", e_arg)
 
@@ -53,7 +53,7 @@ def split_curly_braces(e_arg):
 
 class HBNBCommand(cmd.Cmd):
     """
-    HBNBCommand console class
+    HBNBCommand class
     """
     prompt = "(hbnb) "
     valid_classes = ["BaseModel", "User", "Amenity",
@@ -140,8 +140,6 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """
         Print the string representation of all instances or a specific class.
-        Usage: <User>.all()
-                <User>.show()
         """
         objects = storage.all()
 
@@ -160,7 +158,6 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, arg):
         """
         Counts and retrieves the number of instances of a class
-        usage: <class name>.count()
         """
         objects = storage.all()
 
@@ -184,8 +181,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Update an instance by adding or updating an attribute.
-        Usage: update <class_name> <id> <attribute_name> "<attribute_value>"
+        Update adding or updating an attribute.
         """
         commands = shlex.split(arg)
 
