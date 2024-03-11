@@ -7,11 +7,7 @@ import shlex
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
-from models.state import State
-from models.city import City
+
 
 
 
@@ -144,7 +140,8 @@ class HBNBCommand(cmd.Cmd):
                 'all': self.do_all,
                 'show': self.do_show,
                 'destroy': self.do_destroy,
-                'update': self.do_update
+                'update': self.do_update,
+                'count': self.do_count
                 }
 
         if incoming_method in method_dict.keys():
@@ -152,6 +149,28 @@ class HBNBCommand(cmd.Cmd):
 
         print("*** Unknown syntax: {}".format(arg))
         return False
+    def do_count(self, arg):
+        """
+        Counts and retrieves the number of instances
+        """
+        objects = storage.all()
+
+        commands = shlex.split(arg)
+        if arg:
+            incoming_class_name = commands[0]
+
+        count = 0
+
+        if commands:
+            if incoming_class_name in self.valid_classes:
+                for obj in objects.values():
+                    if obj.__class__.__name__ == incoming_class_name:
+                        count += 1
+                print(count)
+            else:
+                print("** invalid class name **")
+        else:
+            print("** class name missing **")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
