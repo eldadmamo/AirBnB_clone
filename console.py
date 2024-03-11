@@ -7,14 +7,19 @@ import shlex
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.city import City
 
 
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the HBNB project."""
     prompt = '(hbnb) '
-    valid_classes = ["BaseModel", "User"]
+    valid_classes = ["BaseModel", "User", "Amenity",
+                     "Place", "Review", "State", "City"]
     def emptyline(self):
         """
         Do nothing when an empty line is entered.
@@ -132,6 +137,7 @@ class HBNBCommand(cmd.Cmd):
 
         incoming_method = command[0]
         incoming_xtra_arg = command[1].split(')')[0]
+        
         method_dict = {
                 'all': self.do_all,
                 'show': self.do_show,
