@@ -131,42 +131,27 @@ class HBNBCommand(cmd.Cmd):
         Default behavior for cmd
         """
         arg_list = arg.split('.')
+        print(f"{arg_list = }")
 
-        cls_nm = arg_list[0]  # incoming class name
+        incoming_class_name = arg_list[0]
+        print(f"{incoming_class_name = }")
 
         command = arg_list[1].split('(')
 
-        cmd_met = command[0]  # incoming command method
-
-        e_arg = command[1].split(')')[0]  # extra arguments
-
+        incoming_method = command[0]  # incoming command method
+        print(f"")
         method_dict = {
                 'all': self.do_all,
                 'show': self.do_show,
                 'destroy': self.do_destroy,
-                'update': self.do_update,
-                'count': self.do_count
+                'update': self.do_update
                 }
 
-        if cmd_met in method_dict.keys():
-            if cmd_met != "update":
-                return method_dict[cmd_met]("{} {}".format(cls_nm, e_arg))
-            else:
-                if not cls_nm:
-                    print("** class name missing **")
-                    return
-                try:
-                    obj_id, arg_dict = split_curly_braces(e_arg)
-                except Exception:
-                    pass
-                try:
-                    call = method_dict[cmd_met]
-                    return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
-                except Exception:
-                    pass
-        else:
-            print("*** Unknown syntax: {}".format(arg))
-            return False
+        if incoming_method in method_dict.keys():
+            return method_dict[incoming_method]("{} {}".format(incoming_class_name, ''))
+
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
